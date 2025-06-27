@@ -12,8 +12,9 @@ import pynvml
 
 nest_asyncio.apply()
 
-# os.environ['NV_PRIME_RENDER_OFFLOAD']='1'
-# os.environ['__GLX_VENDOR_LIBRARY_NAME']='nvidia'
+
+os.environ["__NV_PRIME_RENDER_OFFLOAD"] = "1"
+os.environ["__GLX_VENDOR_LIBRARY_NAME"] = "nvidia"
 
 
 # GPU 측정 초기화
@@ -124,6 +125,7 @@ async def capture_screenshot_with_gpu(url, output_path, enable_gpu=True, repeat=
         
         # 웹사이트 방문
         await page.goto(url)
+        time.sleep(0.5)
 
         for i in range(0,repeat):
             # print(f" - screenshot: {i}")

@@ -91,7 +91,8 @@ async def capture_screenshot_with_gpu(url, output_path, enable_gpu=True, repeat=
             '--ignore-gpu-blocklist',  # GPU 블랙리스트 무시
             '--enable-gpu-rasterization',  # GPU 래스터화 활성화
             '--enable-raw-draw',  # 성능 개선
-            '--use-angle=egl',  # macOS: 'metal', Linux: 'gl-egl'
+            '--use-angle=gl-egl', # macOS: 'metal', Linux: 'gl-egl'
+            '--use-gl=egl', 
             '--enable-features=Vulkan,SharedArrayBuffer',
             '--headless=new'  # 새로운 헤드리스 모드 사용
             '--disable-gpu-sandbox',
@@ -111,6 +112,18 @@ async def capture_screenshot_with_gpu(url, output_path, enable_gpu=True, repeat=
             args= gpu_flags if enable_gpu else no_gpu_flags,
             chromium_sandbox=False
         )
+
+        # browser = await p.firefox.launch(
+        #     headless=False,  # 헤드리스 모드에서는 Xvfb 필요
+        #     args=[
+        #         '--ignore-gpu-blocklist',
+        #         '--enable-gpu-rasterization',
+        #     ],
+        #     firefox_user_prefs={
+        #         "gfx.webrender.all": True,  # WebRender 강제 활성화
+        #         "gfx.webrender.software": False  # 소프트웨어 렌더링 비활성화
+        #     }
+        # )
 
         start_time = time.time()
         
@@ -150,8 +163,7 @@ async def capture_screenshot_with_gpu(url, output_path, enable_gpu=True, repeat=
             const gl = document.createElement('canvas').getContext('webgl');
             return gl.getParameter(gl.RENDERER);
         }''')
-        print(f" -------> WebGL Renderer: {renderer}")  # NVIDIA GPU명이 출력되면 성공
-
+        print(f" \n -------> WebGL Renderer: {renderer} \n")  # NVIDIA GPU명이 출력되면 성공
 
         
         await browser.close()

@@ -1,0 +1,4 @@
+playwright
+asyncio
+nest_asyncio
+nvidia-ml-py3
